@@ -27,13 +27,15 @@ public class SimpleProducer {
 
         Properties properties = new Properties();
         properties.put("bootstrap.servers", "localhost:9092");
-        properties.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
+//        properties.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
+        properties.put("key.serializer", "com.markqt.kafka.ser.PurchaseKeySerializer");
         properties.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
         properties.put("acks", "1");
         properties.put("retries", "3");
         properties.put("compression.type", "snappy");
         //This line in for demonstration purposes
         properties.put("partitioner.class", PurchaseKeyPartitioner.class.getName());
+        properties.put("key.serializer.class", "kafka.serializer.DefaultEncoder");
 
         PurchaseKey key = new PurchaseKey("12334568", new Date());
 
