@@ -25,22 +25,22 @@ public class ThreadedConsumerExample {
     }
 
 
-    public void startConsuming() {
+    public void startConsuming(String topic) {
         executorService = Executors.newFixedThreadPool(numberPartitions);
         Properties properties = getConsumerProps();
 
         for (int i = 0; i < numberPartitions; i++) {
-            Runnable consumerThread = getConsumerThread(properties);
+            Runnable consumerThread = getConsumerThread(properties, topic);
             executorService.submit(consumerThread);
         }
     }
 
-    private Runnable getConsumerThread(Properties properties) {
+    private Runnable getConsumerThread(Properties properties, String topic) {
         return () -> {
             Consumer<String, String> consumer = null;
             try {
                 consumer = new KafkaConsumer<>(properties);
-                consumer.subscribe(Collections.singletonList("testTopic"));
+                consumer.subscribe(Collections.singletonList(topic));
                 while (!doneConsuming) {
                     ConsumerRecords<String, String> records = consumer.poll(5000);
                     for (ConsumerRecord<String, String> record : records) {
@@ -87,7 +87,7 @@ public class ThreadedConsumerExample {
 
     public static void main(String[] args) throws InterruptedException {
         ThreadedConsumerExample consumerExample = new ThreadedConsumerExample(2);
-        consumerExample.startConsuming();
+        consumerExample.startConsuming("testTopic");
         Thread.sleep(60000); //Run for one minute
         consumerExample.stopConsuming();
     }
