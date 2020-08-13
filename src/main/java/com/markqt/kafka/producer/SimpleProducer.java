@@ -27,7 +27,8 @@ public class SimpleProducer {
 
     	Properties propsOverride = new Properties();
     	propsOverride.put("key.serializer", "com.markqt.kafka.ser.PurchaseKeySerializer");
-
+    	propsOverride.put("partitioner.class", PurchaseKeyPartitioner.class.getName());
+    	
         PurchaseKey key = new PurchaseKey("12334568", new Date());
 
         send("testTopic", propsOverride, key, "value-2");
@@ -50,7 +51,7 @@ public class SimpleProducer {
                     exception.printStackTrace();
                 }
             };
-
+            System.out.println("sending key: " + key + ", value: " + value);
             Future<RecordMetadata> sendFuture = producer.send(record, callback);
         }
 	}
@@ -64,7 +65,7 @@ public class SimpleProducer {
         properties.put("retries", "3");
         properties.put("compression.type", "snappy");
         //This line in for demonstration purposes
-        properties.put("partitioner.class", PurchaseKeyPartitioner.class.getName());
+//        properties.put("partitioner.class", PurchaseKeyPartitioner.class.getName());
         properties.put("key.serializer.class", "kafka.serializer.DefaultEncoder");
 		return properties;
 	}
