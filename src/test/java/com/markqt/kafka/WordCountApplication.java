@@ -5,6 +5,7 @@ import org.apache.kafka.common.utils.Bytes;
 import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.StreamsConfig;
+import org.apache.kafka.streams.Topology;
 import org.apache.kafka.streams.kstream.KStream;
 import org.apache.kafka.streams.kstream.KTable;
 import org.apache.kafka.streams.kstream.Materialized;
@@ -33,8 +34,10 @@ public class WordCountApplication {
             .groupBy((key, word) -> word)
             .count(Materialized.<String, Long, KeyValueStore<Bytes, byte[]>>as("counts-store"));
         wordCounts.toStream().to("WordsWithCountsTopic", Produced.with(Serdes.String(), Serdes.Long()));
-
-        KafkaStreams streams = new KafkaStreams(builder.build(), props);
+        
+        Topology topology = builder.build();
+        System.out.println(topology.describe());
+        KafkaStreams streams = new KafkaStreams(topology, props);
         streams.start();
     }
 
