@@ -53,6 +53,26 @@
 			<version>1.7.30</version>
 		</dependency>
 
+		<dependency>
+			<groupId>org.apache.kafka</groupId>
+			<artifactId>kafka-streams</artifactId>
+			<version>${kafka.version}</version>
+			<scope>test</scope>
+			<classifier>test</classifier>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.kafka</groupId>
+			<artifactId>kafka-clients</artifactId>
+			<version>${kafka.version}</version>
+			<scope>test</scope>
+			<classifier>test</classifier>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.kafka</groupId>
+			<artifactId>kafka-streams-test-utils</artifactId>
+			<version>${kafka.version}</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 
 </project>
